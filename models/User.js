@@ -22,12 +22,12 @@ userSchema.methods.toJSON = function () {
   return obj;
 };
 
-userSchema.methods.generateToken -
-  async function () {
-    const token = await jwt.sign({ _id: this._id }, JWT_SECERET_KEY, {
-      expiresIn: "1d",
-    });
-  };
+userSchema.methods.generateToken = async function () {
+  const token = await jwt.sign({ _id: this._id }, JWT_SECERET_KEY, {
+    expiresIn: "1d",
+  });
+  return token;
+};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
