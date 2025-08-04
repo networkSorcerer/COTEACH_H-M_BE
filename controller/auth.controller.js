@@ -1,6 +1,9 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const authController = {};
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 authController.loginWithEmail = async (req, res) => {
   try {
@@ -19,4 +22,18 @@ authController.loginWithEmail = async (req, res) => {
   }
 };
 
+authController.authenticate = async (req, res, next) => {
+  try {
+    const tokenString = req.headers.authorization;
+    if (!tokenString) throw new Error("Token not found");
+
+    const token = tokenString.replace("Bearer ", "").trim();
+    const payload = jwt.verify(token, JWT_SECRET_KEY); // 동기 방식
+    req.userId = payload._id;
+
+    next();
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
 module.exports = authController;
