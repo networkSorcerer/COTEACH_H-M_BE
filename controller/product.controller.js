@@ -36,7 +36,7 @@ productController.createProduct = async (req, res) => {
 
 productController.getProducts = async (req, res) => {
   try {
-    const { page, name } = req.body;
+    const { page, name } = req.query;
     const cond = name ? { name: { $regex: name, $options: "i" } } : {};
     let query = Product.find(cond);
     const productList = await query.exec();
