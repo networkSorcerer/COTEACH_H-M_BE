@@ -43,16 +43,19 @@ productController.getProducts = async (req, res) => {
     const cond = name ? { name: { $regex: name, $options: "i" } } : {};
     let query = Product.find(cond);
     let response = { state: "success" };
-    if (page) {
-      query.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE);
-      const totalItemNum = await Product.find(cond).count();
-      console.log("totalItemNum", totalItemNum);
+    const pageNumber = parseInt(page, 10);
+    console.log("page:", page, "pageNumber:", pageNumber);
 
+    if (!isNaN(pageNumber) && pageNumber > 0) {
+      console.log("if문 진입함");
+      query = query.skip((pageNumber - 1) * PAGE_SIZE).limit(PAGE_SIZE);
+      const totalItemNum = await Product.countDocuments(cond);
       const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
-      console.log("totalPageNum", totalPageNum);
-
       response.totalPageNum = totalPageNum;
+    } else {
+      console.log("if문 진입 안 함");
     }
+
     const productList = await query.exec();
     response.data = productList;
     res.status(200).json(response);
