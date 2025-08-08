@@ -43,11 +43,14 @@ productController.getProducts = async (req, res) => {
     const cond = name ? { name: { $regex: name, $options: "i" } } : {};
     let query = Product.find(cond);
     let response = { state: "success" };
-    console.log("ppppp", page);
     if (page) {
       query.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE);
       const totalItemNum = await Product.find(cond).count();
+      console.log("totalItemNum", totalItemNum);
+
       const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
+      console.log("totalPageNum", totalPageNum);
+
       response.totalPageNum = totalPageNum;
     }
     const productList = await query.exec();
