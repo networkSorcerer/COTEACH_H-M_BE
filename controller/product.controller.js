@@ -14,6 +14,11 @@ productController.createProduct = async (req, res) => {
       stock,
       status,
     } = req.body;
+    
+    let productSku = await Product.findOne({ sku });
+    if (productSku) {
+      throw new Error("이미 존재하는 식별 코드 입니다.");
+    }
 
     const product = new Product({
       sku,
@@ -26,9 +31,7 @@ productController.createProduct = async (req, res) => {
       stock,
       status,
     });
-
     await product.save();
-    res.status(200).json({ status: "success", product });
   } catch (error) {
     return res.status(400).json({ status: "fail", error: error.message });
   }
