@@ -58,6 +58,7 @@ productController.getProducts = async (req, res) => {
 
     const productList = await query.exec();
     response.data = productList;
+    console.log("response to client:", response);
     res.status(200).json(response);
   } catch (error) {
     res.status(400).json({ status: "fail", error: error.message });
