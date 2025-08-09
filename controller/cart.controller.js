@@ -49,7 +49,7 @@ cartController.getCart = async (req, res) => {
 
 cartController.deleteCartItem = async (req, res) => {
   try {
-    const { itemId } = req.params; // URL에서 받기
+    const itemId = req.params.id; // URL에서 받기
     await Cart.findByIdAndDelete(itemId);
 
     res.status(200).json({ status: "success" });
@@ -60,13 +60,18 @@ cartController.deleteCartItem = async (req, res) => {
 
 cartController.updateCart = async (req, res) => {
   try {
-    const { userId } = req;
-    const cart = await Cart.findOne({ userId }).populate("items.productId");
+    const itemId = req.params.id;
+    const qty = req.body.qty;
+    const cart = await Cart.findByIdAndUpdate(
+      { _id: itemId },
+      { qty },
+      { new: true }
+    );
+    if (!cart) throw new Error("item doesn't exist");
 
     res.status(200).json({
       status: "success",
-      data: cart?.items || [],
-      cartItemQty: cart.items.length,
+      data: cart,
     });
   } catch (error) {
     res.status(400).json({ status: "fail", error: error.message });
