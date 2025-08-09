@@ -50,9 +50,7 @@ cartController.getCart = async (req, res) => {
 cartController.deleteCartItem = async (req, res) => {
   try {
     const itemId = req.params.id;
-    console.log("delete id 잘 가져옴 ? ", itemId);
     const userId = req.userId;
-    console.log("delete 회원 아이디는? ", userId);
     const cart = await Cart.findOneAndUpdate(
       { userId: userId },
       { $pull: { items: { _id: itemId } } },
@@ -76,9 +74,12 @@ cartController.updateCart = async (req, res) => {
   try {
     const itemId = req.params.id;
     const qty = req.body.qty;
+    const userId = req.userId;
+
     const cart = await Cart.findByIdAndUpdate(
-      { _id: itemId },
-      { qty },
+      { userId: userId },
+      { $pull: { items: { _id: itemId } } },
+      { qty: qty },
       { new: true }
     );
     if (!cart) throw new Error("item doesn't exist");
