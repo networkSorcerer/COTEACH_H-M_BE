@@ -54,7 +54,7 @@ cartController.deleteCartItem = async (req, res) => {
     const userIds = req.userId;
     console.log("delete 회원 아이디는? ", userId);
     const cart = await Cart.findOneAndUpdate(
-      { userId: userId },
+      { userId: userIds },
       { $pull: { items: { _id: itemId } } },
       { new: true }
     );
