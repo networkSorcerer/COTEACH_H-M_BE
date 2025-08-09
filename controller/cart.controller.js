@@ -51,7 +51,7 @@ cartController.deleteCartItem = async (req, res) => {
   try {
     const itemId = req.params.id;
     console.log("delete id 잘 가져옴 ? ", itemId);
-    const { userId } = req;
+    const { userId } = req.userId;
     console.log("delete 회원 아이디는? ", userId);
     const cart = await Cart.findOneAndUpdate(
       { userId: userId },
