@@ -30,4 +30,14 @@ cartController.addItemToCart = async (req, res) => {
     res.status(400).json({ status: "fail", error: error.message });
   }
 };
+
+cartController.getCart = async (req, res) => {
+  try {
+    const { userId } = req;
+    const cart = await Cart.findOne({ userId });
+    res.status(200).json({ status: "success", data: cart.items });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
 module.exports = cartController;
