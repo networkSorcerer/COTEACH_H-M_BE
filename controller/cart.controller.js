@@ -50,9 +50,10 @@ cartController.getCart = async (req, res) => {
 cartController.deleteCartItem = async (req, res) => {
   try {
     const itemId = req.params.id; // URL에서 받기
-    await Cart.findByIdAndDelete(itemId);
-
-    res.status(200).json({ status: "success" });
+    console.log("delete 시 id 잘 받았음", itemId);
+    const cart = await Cart.findByIdAndDelete(itemId);
+    if (!cart) throw new Error("item doesn't exist");
+    res.status(200).json({ status: "success", data: cart });
   } catch (error) {
     res.status(400).json({ status: "fail", error: error.message });
   }
