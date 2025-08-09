@@ -34,7 +34,7 @@ productController.createProduct = async (req, res) => {
     await product.save();
 
     // 성공 응답 추가
-    return res.status(201).json({
+    return res.status(200).json({
       status: "success",
       data: product,
     });
