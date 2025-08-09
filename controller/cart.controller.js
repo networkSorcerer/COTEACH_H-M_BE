@@ -77,9 +77,8 @@ cartController.updateCart = async (req, res) => {
     const userId = req.userId;
 
     const cart = await Cart.findOneAndUpdate(
-      { userId: userId },
-      { $pull: { items: { _id: itemId } } },
-      { qty: qty },
+      { userId: userId, "items._id": itemId }, // userId와 배열 내 아이템 _id 조건
+      { $set: { "items.$.qty": qty } }, // 해당 아이템 qty 필드만 업데이트
       { new: true }
     );
     if (!cart) throw new Error("item doesn't exist");
