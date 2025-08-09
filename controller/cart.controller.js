@@ -49,7 +49,7 @@ cartController.getCart = async (req, res) => {
 
 cartController.deleteCartItem = async (req, res) => {
   try {
-    const { itemId } = req.body; // itemId = items 배열의 _id
+    const itemId = req.params.id;
     const cart = await Cart.findOneAndUpdate(
       { userId: req.user._id }, // 로그인한 사용자의 cart
       { $pull: { items: { _id: itemId } } },
