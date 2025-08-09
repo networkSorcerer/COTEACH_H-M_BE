@@ -51,7 +51,7 @@ cartController.deleteCartItem = async (req, res) => {
   try {
     const itemId = req.params.id;
     const cart = await Cart.findOneAndUpdate(
-      { userId: req.user._id }, // 로그인한 사용자의 cart
+      { userId: req }, 
       { $pull: { items: { _id: itemId } } },
       { new: true }
     );
