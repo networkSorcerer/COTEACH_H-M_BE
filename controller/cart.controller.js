@@ -21,7 +21,9 @@ cartController.addItemToCart = async (req, res) => {
     // 카트에 아이템을 추가
     cart.items = [...cart.items, { productId, size, qty }];
     await cart.save();
-    res.status(200).json({ status: "success", data: cart, });
+    res
+      .status(200)
+      .json({ status: "success", data: cart, cartItemQty: cart.items.length });
   } catch (error) {
     res.status(400).json({ status: "fail", error: error.message });
   }
