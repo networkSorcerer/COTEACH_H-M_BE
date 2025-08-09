@@ -76,7 +76,7 @@ cartController.updateCart = async (req, res) => {
     const qty = req.body.qty;
     const userId = req.userId;
 
-    const cart = await Cart.findByIdAndUpdate(
+    const cart = await Cart.findOneAndUpdate(
       { userId: userId },
       { $pull: { items: { _id: itemId } } },
       { qty: qty },
