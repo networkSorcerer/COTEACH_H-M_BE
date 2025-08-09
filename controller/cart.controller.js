@@ -1,4 +1,6 @@
 const cartController = {};
+const Cart = require("../models/Cart");
+
 cartController.addItemToCart = async (req, res) => {
   try {
     const { userId } = req;
