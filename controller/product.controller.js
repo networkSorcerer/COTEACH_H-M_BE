@@ -90,4 +90,16 @@ productController.updateProduct = async (req, res) => {
     res.status(400).json({ status: "fail", error: error.message });
   }
 };
+
+productController.deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await Product.findByIdAndDelete(productId); // 이렇게만 해도 OK
+    if (!product) throw new Error("item doesn't exist");
+    res.status(200).json({ status: "success", data: product });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
+
 module.exports = productController;
