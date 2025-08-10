@@ -38,4 +38,15 @@ orderController.createOrder = async (req, res) => {
   }
 };
 
+orderController.getOrder = async (req, res) => {
+  try {
+    const { userId } = req;
+    // 재고 확인 & 재고 업데이트
+    const orderList = await Order.find({ userId });
+
+    res.status(200).json({ status: "success", data: orderList });
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
 module.exports = orderController;
