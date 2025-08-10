@@ -4,6 +4,7 @@ const Order = require("../models/Order");
 const productController = require("./product.controller");
 const { randomStringGenerator } = require("../utils/randomStringGenerator");
 const PAGE_SIZE = 3;
+
 orderController.createOrder = async (req, res) => {
   try {
     const { userId } = req;
@@ -57,7 +58,9 @@ orderController.getOrderList = async (req, res) => {
     const cond = ordernum
       ? { orderNum: { $regex: ordernum, $options: "i" } }
       : {};
-    let query = Order.find(cond);
+    let query = Order.find(cond)
+      .populate("userId", "email")
+      .populate("items.productId", "name");
     let response = { state: "success" };
     const pageNumber = parseInt(page, 10);
     console.log("page:", page, "pageNumber:", pageNumber);
