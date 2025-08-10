@@ -3,7 +3,7 @@ const { populate } = require("dotenv");
 const Order = require("../models/Order");
 const productController = require("./product.controller");
 const { randomStringGenerator } = require("../utils/randomStringGenerator");
-
+const PAGE_SIZE = 3;
 orderController.createOrder = async (req, res) => {
   try {
     const { userId } = req;
