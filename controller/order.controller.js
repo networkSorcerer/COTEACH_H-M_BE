@@ -55,7 +55,7 @@ orderController.getOrderList = async (req, res) => {
     const { page, ordernum } = req.query;
     console.log("getOrderList 프론트에서 뭘 보내줬니? : ", page, ordernum);
     const cond = ordernum
-      ? { ordernum: { $regex: ordernum, $options: "i" } }
+      ? { orderNum: { $regex: ordernum, $options: "i" } }
       : {};
     let query = Order.find(cond);
     let response = { state: "success" };
