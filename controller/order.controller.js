@@ -31,6 +31,7 @@ orderController.createOrder = async (req, res) => {
     });
 
     await newOrder.save();
+    // save 후에 재고를 비워주자
     res.status(200).json({ status: "success", orderNum: newOrder.orderNum });
   } catch (error) {
     res.status(400).json({ status: "fail", error: error.message });
