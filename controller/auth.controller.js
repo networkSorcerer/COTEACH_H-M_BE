@@ -4,6 +4,8 @@ const authController = {};
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+const { OAuth2Client } = require("google-auth-library");
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 
 authController.loginWithEmail = async (req, res) => {
   try {
@@ -47,4 +49,20 @@ authController.checkAdminPermission = async (req, res, next) => {
     res.status(400).json({ status: "fail", error: error.message });
   }
 };
+
+authController.loginWithEmail = async (res, req) => {
+  try {
+    const { token } = req.body;
+    const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
+    const ticket = await googleClient.verifyIdToken({
+      idToken: token,
+      audience: GOOGLE_CLIENT_ID,
+    });
+    const { email, name } = ticket.getPayload();
+    console.log("eeee", email, name);
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
+
 module.exports = authController;
