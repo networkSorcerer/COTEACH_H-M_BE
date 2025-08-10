@@ -53,18 +53,14 @@ productController.getProducts = async (req, res) => {
     console.log("page:", page, "pageNumber:", pageNumber);
 
     if (!isNaN(pageNumber) && pageNumber > 0) {
-      console.log("if문 진입함");
       query = query.skip((pageNumber - 1) * PAGE_SIZE).limit(PAGE_SIZE);
       const totalItemNum = await Product.countDocuments(cond);
       const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
       response.totalPageNum = totalPageNum;
     } else {
-      console.log("if문 진입 안 함");
     }
-
     const productList = await query.exec();
     response.data = productList;
-    console.log("response to client:", response);
     res.status(200).json(response);
   } catch (error) {
     res.status(400).json({ status: "fail", error: error.message });
