@@ -61,7 +61,7 @@ orderController.getOrderList = async (req, res) => {
 
     if (!isNaN(pageNumber) && pageNumber > 0) {
       query = query.skip((pageNumber - 1) * PAGE_SIZE).limit(PAGE_SIZE);
-      const totalItemNum = await Product.countDocuments(cond);
+      const totalItemNum = await Order.countDocuments(cond);
       const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
       response.totalPageNum = totalPageNum;
     }
