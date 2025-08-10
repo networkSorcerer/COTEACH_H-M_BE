@@ -4,5 +4,6 @@ const authController = require("../controller/auth.controller");
 const orderController = require("../controller/order.controller");
 router.post("/", authController.authenticate, orderController.createOrder);
 router.get("/", authController.authenticate, orderController.getOrder);
+router.get("/list", orderController.getOrderList);
 
 module.exports = router;

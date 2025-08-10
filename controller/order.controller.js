@@ -49,4 +49,28 @@ orderController.getOrder = async (req, res) => {
     res.status(400).json({ status: "fail", error: error.message });
   }
 };
+
+orderController.getOrderList = async (req, res) => {
+  try {
+    const { page, name } = req.query;
+    const cond = name ? { name: { $regex: name, $options: "i" } } : {};
+    let query = Order.find(cond);
+    let response = { state: "success" };
+    const pageNumber = parseInt(page, 10);
+    console.log("page:", page, "pageNumber:", pageNumber);
+
+    if (!isNaN(pageNumber) && pageNumber > 0) {
+      query = query.skip((pageNumber - 1) * PAGE_SIZE).limit(PAGE_SIZE);
+      const totalItemNum = await Product.countDocuments(cond);
+      const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
+      response.totalPageNum = totalPageNum;
+    }
+
+    const order = await query.exec();
+    response.data = order;
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).json({ status: "fail", error: error.message });
+  }
+};
 module.exports = orderController;
