@@ -50,7 +50,7 @@ authController.checkAdminPermission = async (req, res, next) => {
   }
 };
 
-authController.loginWithGoogle = async (res, req) => {
+authController.loginWithGoogle = async (req, res) => {
   try {
     const { token } = req.body;
     const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
@@ -59,11 +59,11 @@ authController.loginWithGoogle = async (res, req) => {
       audience: GOOGLE_CLIENT_ID,
     });
     const { email, name } = ticket.getPayload();
-    console.log("eeee", email, name);
+
     let user = await User.findOne({ email });
     if (!user) {
       const randomPassword = "" + Math.floor(Math.random() * 10000000000);
-      const salt = await bcrypt.getSalt(10);
+      const salt = await bcrypt.genSalt(10);
       const newPassword = await bcrypt.hash(randomPassword, salt);
       user = new User({ name, email, password: newPassword });
       await user.save();
