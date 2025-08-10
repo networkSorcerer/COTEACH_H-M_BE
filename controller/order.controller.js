@@ -7,7 +7,7 @@ orderController.createOrder = async (req, res) => {
   try {
     const { userId } = req;
     const { shipTo, contact, totalPrice, orderList } = req.body;
-
+    console.log("와이 order api를 타지 않나?", req.body);
     // 재고 확인 & 재고 업데이트
     const insufficientStockItems = await productController.checkItemListStock(
       orderList
