@@ -4,7 +4,16 @@ const Order = require("../models/Order");
 const productController = require("./product.controller");
 const { randomStringGenerator } = require("../utils/randomStringGenerator");
 const PAGE_SIZE = 3;
-
+// 먼저  아이템 2개를 카트에 담는다
+// 어드민 페이지에간다
+// 카트에 담은 아이템중 첫번쨰 아이템은 재고를 0으로  수정
+// 두번째 아이템은 남은 재고 기억하기
+// 다시 카트페이지로 돌아가 구매진행
+// 구매 실패메세지와  어떤 아이템 구매실패했는지  메세지  정확히  유저친화적으로 뜨는지  확인
+// 어드민페이지로 돌아간다
+// 두번째 아이템의 재고가 그대로 있어야한다 ,  (재고가  줄어들면 실패)
+// 다시 정상  시나리오 테스트,
+// 결제 완료  후  재고가  줄어드는지 확인
 orderController.createOrder = async (req, res) => {
   try {
     const { userId } = req;
