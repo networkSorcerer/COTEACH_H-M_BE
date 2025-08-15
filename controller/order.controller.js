@@ -1,6 +1,7 @@
 const orderController = {};
 const { populate } = require("dotenv");
 const Order = require("../models/Order");
+const Product = require("../models/Pruduct");
 const productController = require("./product.controller");
 const { randomStringGenerator } = require("../utils/randomStringGenerator");
 const PAGE_SIZE = 3;
