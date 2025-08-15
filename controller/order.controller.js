@@ -15,7 +15,6 @@ const PAGE_SIZE = 3;
 // 다시 정상  시나리오 테스트,
 // 결제 완료  후  재고가  줄어드는지 확인
 orderController.createOrder = async (req, res) => {
-
   try {
     const { userId } = req;
     const { shipTo, contact, totalPrice, orderList } = req.body;
@@ -40,19 +39,15 @@ orderController.createOrder = async (req, res) => {
       items: orderList,
       orderNum: randomStringGenerator(),
     });
-    await newOrder.save({ session });
+    await newOrder.save();
 
     // 주문 확정 후 재고 차감
     for (const item of orderList) {
       await Product.updateOne(
         { _id: item.productId },
         { $inc: { [`stock.${item.size}`]: -item.qty } },
-        { session }
       );
     }
-
-    await session.commitTransaction();
-    session.endSession();
 
     res.status(200).json({ status: "success", orderNum: newOrder.orderNum });
   } catch (error) {
