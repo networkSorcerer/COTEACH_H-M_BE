@@ -15,8 +15,6 @@ const PAGE_SIZE = 3;
 // 다시 정상  시나리오 테스트,
 // 결제 완료  후  재고가  줄어드는지 확인
 orderController.createOrder = async (req, res) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
 
   try {
     const { userId } = req;
