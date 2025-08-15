@@ -129,11 +129,6 @@ productController.checkStock = async (item) => {
     };
   }
 
-  const newStock = { ...product.stock };
-  newStock[item.size] -= item.qty; // 대소문자 주의
-  product.stock = newStock;
-  await product.save();
-
   return { isVerify: true };
 };
 

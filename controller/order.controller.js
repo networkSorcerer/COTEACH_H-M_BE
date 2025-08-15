@@ -15,22 +15,25 @@ const PAGE_SIZE = 3;
 // 다시 정상  시나리오 테스트,
 // 결제 완료  후  재고가  줄어드는지 확인
 orderController.createOrder = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const { userId } = req;
     const { shipTo, contact, totalPrice, orderList } = req.body;
-    // 재고 확인 & 재고 업데이트
+
+    // 재고 확인 (조회 전용)
     const insufficientStockItems = await productController.checkItemListStock(
       orderList
     );
-
     if (insufficientStockItems.length > 0) {
       const errorMessage = insufficientStockItems
         .reduce((total, item) => total + item.message + " ", "")
         .trim();
-
       throw new Error(errorMessage);
     }
 
+    // 주문 생성
     const newOrder = new Order({
       userId,
       totalPrice,
@@ -39,11 +42,24 @@ orderController.createOrder = async (req, res) => {
       items: orderList,
       orderNum: randomStringGenerator(),
     });
+    await newOrder.save({ session });
 
-    await newOrder.save();
-    // save 후에 재고를 비워주자
+    // 주문 확정 후 재고 차감
+    for (const item of orderList) {
+      await Product.updateOne(
+        { _id: item.productId },
+        { $inc: { [`stock.${item.size}`]: -item.qty } },
+        { session }
+      );
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+
     res.status(200).json({ status: "success", orderNum: newOrder.orderNum });
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
     res.status(400).json({ status: "fail", error: error.message });
   }
 };
