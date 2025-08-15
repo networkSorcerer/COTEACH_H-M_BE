@@ -60,7 +60,7 @@ orderController.getOrder = async (req, res) => {
   try {
     const { userId } = req;
     // 재고 확인 & 재고 업데이트
-    const orderList = await Order.find({ userId });
+    const orderList = await Order.find({ userId }).populate("items.productId");
 
     res.status(200).json({ status: "success", data: orderList });
   } catch (error) {
