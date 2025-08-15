@@ -45,14 +45,12 @@ orderController.createOrder = async (req, res) => {
     for (const item of orderList) {
       await Product.updateOne(
         { _id: item.productId },
-        { $inc: { [`stock.${item.size}`]: -item.qty } },
+        { $inc: { [`stock.${item.size}`]: -item.qty } }
       );
     }
 
     res.status(200).json({ status: "success", orderNum: newOrder.orderNum });
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
     res.status(400).json({ status: "fail", error: error.message });
   }
 };
