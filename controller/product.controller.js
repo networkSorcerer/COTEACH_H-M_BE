@@ -53,7 +53,7 @@ productController.getProducts = async (req, res) => {
       cond.name = { $regex: name, $options: "i" }; // 이름 검색
     }
     // menu가 있고, "전체"가 아닐 때만 category 필터 적용
-    if (menu && menu !== "전체") {
+    if (menu && menu !== "ALL") {
       cond.category = menu;
     }
 
