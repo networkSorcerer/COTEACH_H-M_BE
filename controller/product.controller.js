@@ -45,8 +45,17 @@ productController.createProduct = async (req, res) => {
 
 productController.getProducts = async (req, res) => {
   try {
-    const { page, name } = req.query;
-    const cond = name ? { name: { $regex: name, $options: "i" } } : {};
+    const { page, name, menu } = req.query;
+
+    // 조건 만들기
+    let cond = {};
+    if (name) {
+      cond.name = { $regex: name, $options: "i" }; // 이름 검색
+    }
+    if (menu) {
+      cond.category = menu; // 카테고리 검색
+    }
+
     let query = Product.find(cond);
     let response = { state: "success" };
     const pageNumber = parseInt(page, 10);
@@ -57,8 +66,8 @@ productController.getProducts = async (req, res) => {
       const totalItemNum = await Product.countDocuments(cond);
       const totalPageNum = Math.ceil(totalItemNum / PAGE_SIZE);
       response.totalPageNum = totalPageNum;
-    } else {
     }
+
     const productList = await query.exec();
     response.data = productList;
     res.status(200).json(response);
@@ -137,7 +146,7 @@ productController.checkItemListStock = async (itemList) => {
 
   await Promise.all(
     itemList.map(async (item) => {
-      const stockCheck = await productController.checkStock(item); // 
+      const stockCheck = await productController.checkStock(item); //
       if (!stockCheck.isVerify) {
         insufficientStockItems.push({ item, message: stockCheck.message });
       }
