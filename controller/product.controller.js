@@ -46,14 +46,15 @@ productController.createProduct = async (req, res) => {
 productController.getProducts = async (req, res) => {
   try {
     const { page, name, menu } = req.query;
-    console.log("mmmmmmmmm", menu);
+
     // 조건 만들기
     let cond = {};
     if (name) {
       cond.name = { $regex: name, $options: "i" }; // 이름 검색
     }
-    if (menu) {
-      cond.category = menu; // 카테고리 검색
+    // menu가 있고, "전체"가 아닐 때만 category 필터 적용
+    if (menu && menu !== "전체") {
+      cond.category = menu;
     }
 
     let query = Product.find(cond);

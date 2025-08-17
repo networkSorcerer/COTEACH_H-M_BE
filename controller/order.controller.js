@@ -71,7 +71,6 @@ orderController.getOrder = async (req, res) => {
 orderController.getOrderList = async (req, res) => {
   try {
     const { page, ordernum } = req.query;
-    console.log("getOrderList 프론트에서 뭘 보내줬니? : ", page, ordernum);
     const cond = ordernum
       ? { orderNum: { $regex: ordernum, $options: "i" } }
       : {};
