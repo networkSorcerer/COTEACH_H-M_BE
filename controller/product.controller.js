@@ -46,7 +46,7 @@ productController.createProduct = async (req, res) => {
 productController.getProducts = async (req, res) => {
   try {
     const { page, name, menu } = req.query;
-
+    console.log("mmmmmmmmm", menu);
     // 조건 만들기
     let cond = {};
     if (name) {
